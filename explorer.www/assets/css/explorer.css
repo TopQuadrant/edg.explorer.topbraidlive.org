@@ -1,0 +1,53 @@
+/* Controls the header styling */
+.teamwork-page-header {
+  background-color: #d9d9d9 !important;
+}
+
+/* Controls the text color of h1/2/3 in swa and react-widgets used on the homepage */
+[data-swa-widget] h1,
+[data-swa-widget] h2,
+[data-swa-widget] h3,
+[data-react-widget] h1,
+[data-react-widget] h2,
+[data-react-widget] h3 {
+  color: black !important;
+}
+
+/* Controls the Search Widget of the homepage */
+[data-react-widget='MultiSearch'] {
+  padding-top: 70px !important;
+}
+
+.multi-search-explorer {
+  min-height: 100px !important;
+}
+
+.multi-search-explorer .multi-search-input-container.expanded {
+  top: unset;
+}
+
+/* Controls the welcome message styling */
+.explorer-welcome-gadget {
+  text-align: center;
+  padding-top:unset !important;
+}
+
+.widget-content {
+  padding-top: 100px;
+}
+
+/* Controls Basket, Admin icons in the header */
+/* .btn-icon-tq {
+    height: 35px;
+    padding: 0.25rem 0.5rem;
+    font-size: .76562rem;
+    line-height: 1.5;
+    border-radius: 0.2rem;
+} */
+
+/* Overrides all button styles */
+/* .btn{
+    color: #fff;
+    background: #343a40 linear-gradient(180deg, #52585d, #343a40) repeat-x;
+    border-color: #343a40; 
+} */

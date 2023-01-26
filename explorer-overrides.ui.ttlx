@@ -1,0 +1,361 @@
+@prefix arg:        <http://spinrdf.org/arg#> .
+@prefix edgproduct: <http://edg.topbraidlive.org/edgproduct#> .
+@prefix governance: <http://topbraid.org/teamworkgovernance.ui#> .
+@prefix html:       <http://uispin.org/html#> .
+@prefix let:        <http://uispin.org/let#> .
+@prefix owl:        <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:        <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:       <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh:         <http://www.w3.org/ns/shacl#> .
+@prefix smf:        <http://topbraid.org/sparqlmotionfunctions#> .
+@prefix sp:         <http://spinrdf.org/sp#> .
+@prefix spin:       <http://spinrdf.org/spin#> .
+@prefix spl:        <http://spinrdf.org/spl#> .
+@prefix swa:        <http://topbraid.org/swa#> .
+@prefix tasks:      <http://topbraid.org/tasks#> .
+@prefix teamwork:   <http://topbraid.org/teamwork#> .
+@prefix ui:         <http://uispin.org/ui#> .
+@prefix xsd:        <http://www.w3.org/2001/XMLSchema#> .
+
+<http://edg.expolorer.topbraidlive.org/explorer-overrides>
+        rdf:type              owl:Ontology ;
+        rdfs:label            "Explorer Overrides" ;
+        swa:defaultNamespace  "http://edg.expolorer.topbraidlive.org/explorer-overrides#" ;
+        teamwork:rootClass    rdfs:Resource ;
+        teamwork:testGraph    true ;
+        owl:imports           <http://topbraid.org/teamwork.ui> , <http://topbraid.org/swa> , <http://teamwork.topbraidlive.org/system/filesimport> , <http://edg.topbraidlive.org/edgproduct> ;
+        owl:versionInfo       "Created with TopBraid Composer" .
+
+edgproduct:LandingPageExplorer
+        rdf:type         ui:ViewElement ;
+        rdfs:label       "Landing page explorer" ;
+        rdfs:subClassOf  ui:ViewElements ;
+        ui:overrides     edgproduct:LandingPage ;
+        ui:prototype     [ rdf:type    html:Section ;
+                           html:class  "container-fluid" ;
+                           let:user    [ rdf:type  smf:userWithName ;
+                                         sp:arg1   [ rdf:type  smf:currentUserName ]
+                                       ] ;
+                           ui:child    [ rdf:type       html:Div ;
+                                         html:class     "row" ;
+                                         ui:child       [ rdf:type       edgproduct:LandingPageColumn ;
+                                                          arg:col        2 ;
+                                                          arg:user       [ sp:varName  "user" ] ;
+                                                          ui:childIndex  1
+                                                        ] ;
+                                         ui:child       [ rdf:type       html:Div ;
+                                                          html:class     "col-md-4" ;
+                                                          ui:childIndex  2
+                                                        ] ;
+                                         ui:child       [ rdf:type       html:Div ;
+                                                          html:class     "col-md-4" ;
+                                                          ui:childIndex  0
+                                                        ] ;
+                                         ui:childIndex  0
+                                       ]
+                         ] .
+
+edgproduct:LandingPageColumnExplorer
+        rdf:type           ui:ViewElement ;
+        rdfs:label         "Landing page column explorer" ;
+        rdfs:subClassOf    ui:ViewElements ;
+        spin:constraint    [ rdf:type       spl:Argument ;
+                             spl:predicate  arg:col ;
+                             spl:valueType  xsd:integer
+                           ] ;
+        spin:constraint    [ rdf:type       spl:Argument ;
+                             spl:predicate  arg:user ;
+                             spl:valueType  rdfs:Resource
+                           ] ;
+        ui:errorPrototype  [ rdf:type      ui:if ;
+                             ui:child      [ rdf:type       html:Div ;
+                                             html:class     "col-12 col-md-4" ;
+                                             ui:child       [ rdf:type       html:Span ;
+                                                              html:class     "alert alert-danger" ;
+                                                              ui:child       [ rdf:type       ui:TextNode ;
+                                                                               ui:childIndex  0 ;
+                                                                               ui:text        "edgproduct:LandingPageColumn requires the parameter ?col and must be a non-negative integer. "
+                                                                             ] ;
+                                                              ui:childIndex  0
+                                                            ] ;
+                                             ui:childIndex  0
+                                           ] ;
+                             ui:condition  [ rdf:type  sp:or ;
+                                             sp:arg1   [ rdf:type  sp:not ;
+                                                         sp:arg1   [ rdf:type  sp:bound ;
+                                                                     sp:arg1   [ sp:varName  "col" ]
+                                                                   ]
+                                                       ] ;
+                                             sp:arg2   [ rdf:type  sp:and ;
+                                                         sp:arg1   [ rdf:type  sp:bound ;
+                                                                     sp:arg1   [ sp:varName  "col" ]
+                                                                   ] ;
+                                                         sp:arg2   [ rdf:type  sp:lt ;
+                                                                     sp:arg1   [ sp:varName  "col" ] ;
+                                                                     sp:arg2   0
+                                                                   ]
+                                                       ]
+                                           ]
+                           ] ;
+        ui:overrides       edgproduct:LandingPageColumn ;
+        ui:prototype       [ rdf:type    html:Div ;
+                             html:class  "col-12 col-lg-4 col-xl-4" ;
+                             ui:child    [ rdf:type       teamwork:MultiSearchBar ;
+                                           ui:childIndex  1
+                                         ] ;
+                             ui:child    [ rdf:type       teamwork:RecentlyViewedCollections ;
+                                           ui:childIndex  2
+                                         ] ;
+                             ui:child    [ rdf:type       teamwork:ExplorerWelcomeGadget ;
+                                           ui:childIndex  0
+                                         ]
+                           ] .
+
+teamwork:LogoOverride
+        rdf:type         ui:NodeClass ;
+        rdfs:comment     "Produces a hyperlinked div with the appropriate style representing the current product." ;
+        rdfs:label       "Logo - Explorer" ;
+        rdfs:subClassOf  teamwork:Elements ;
+        spin:constraint  [ rdf:type       spl:Argument ;
+                           rdfs:comment   "True to disable the link behind the icon." ;
+                           spl:optional   true ;
+                           spl:predicate  arg:suppressHome ;
+                           spl:valueType  xsd:boolean
+                         ] ;
+        ui:overrides     teamwork:Logo ;
+        ui:prototype     [ rdf:type         html:A ;
+                           html:aria-label  "Product logo" ;
+                           html:href        [ rdf:type  sp:if ;
+                                              sp:arg1   [ rdf:type  swa:falseOrUnbound ;
+                                                          sp:arg1   [ sp:varName  "suppressHome" ]
+                                                        ] ;
+                                              sp:arg2   [ rdf:type  teamwork:homeLink ] ;
+                                              sp:arg3   [ sp:varName  "none" ]
+                                            ] ;
+                           ui:child         [ rdf:type       html:Script ;
+                                              ui:child       [ rdf:type       ui:TextNode ;
+                                                               ui:childIndex  0 ;
+                                                               ui:text        "document.title=\"TopBraid Explorer\""
+                                                             ] ;
+                                              ui:childIndex  1
+                                            ] ;
+                           ui:child         [ rdf:type       html:Div ;
+                                              html:class     "teamwork-logo" ;
+                                              ui:child       [ rdf:type       html:Img ;
+                                                               html:src       "lib/explorer/assets/images/Explorer-Logo.png" ;
+                                                               ui:childIndex  0
+                                                             ] ;
+                                              ui:childIndex  0
+                                            ]
+                         ] .
+
+teamwork:Chrome  ui:headIncludes  [ rdf:type   html:Link ;
+                                    html:href  "lib/explorer/assets/css/explorer.css" ;
+                                    html:rel   "stylesheet"
+                                  ] .
+
+swa:ElementsOverride  rdf:type  ui:NodeClass ;
+        rdfs:comment      "Abstract superclass of all SWA elements. Makes sure that certain required head includes (JavaScript and CSS files) are present." ;
+        rdfs:label        "Elements Override Explorer" ;
+        rdfs:subClassOf   ui:ViewElements ;
+        ui:abstract       true ;
+        ui:headIncludes   [ rdf:type  ui:group ;
+                            ui:child  [ rdf:type       ui:CommentNode ;
+                                        rdfs:comment   "<script>$.jqplot.config.enablePlugins = true;</script> " ;
+                                        ui:childIndex  3
+                                      ] ;
+                            ui:child  [ rdf:type       html:Link ;
+                                        html:href      [ rdf:type  ui:concat ;
+                                                         sp:arg1   [ rdf:type  ui:lib ] ;
+                                                         sp:arg2   "/assets/images/tqicon.ico"
+                                                       ] ;
+                                        html:rel       "shortcut icon" ;
+                                        ui:childIndex  1
+                                      ] ;
+                            ui:child  [ rdf:type       ui:CommentNode ;
+                                        rdfs:comment   "script>swa.imgPath=\"{= ui:lib() }/assets/build/images/carousel/\";</script" ;
+                                        ui:childIndex  4
+                                      ] ;
+                            ui:child  [ rdf:type       ui:CommentNode ;
+                                        rdfs:comment   " shortcut icon " ;
+                                        ui:childIndex  0
+                                      ] ;
+                            ui:child  [ rdf:type       html:Link ;
+                                        html:href      [ rdf:type  ui:concat ;
+                                                         sp:arg1   [ rdf:type  ui:lib ] ;
+                                                         sp:arg2   "/explorer/assets/css/explorer.css"
+                                                       ] ;
+                                        html:rel       "stylesheet" ;
+                                        ui:childIndex  2
+                                      ]
+                          ] ;
+        ui:includeScript  swa:Bundle , swa:Meta ;
+        ui:overrides      swa:Elements .
+
+teamwork:ExplorerWelcomeGadget
+        rdf:type         teamwork:LandingPageGadgetHook ;
+        rdfs:comment     "" ;
+        rdfs:label       "Explorer Welcome Gadget" ;
+        rdfs:subClassOf  teamwork:LandingPageGadgetHooks ;
+        ui:prototype     [ rdf:type    html:Section ;
+                           html:class  "col-12" ;
+                           ui:child    [ rdf:type       html:Div ;
+                                         html:class     "widget-content explorer-welcome-gadget" ;
+                                         ui:child       [ rdf:type       html:H1 ;
+                                                          ui:child       [ rdf:type       ui:TextNode ;
+                                                                           ui:childIndex  0 ;
+                                                                           ui:text        "Welcome to TopBraid Explorer"
+                                                                         ] ;
+                                                          ui:childIndex  0
+                                                        ] ;
+                                         ui:childIndex  0
+                                       ]
+                         ] .
+
+teamwork:HeaderExplorer
+        rdf:type         ui:NodeClass ;
+        rdfs:comment     "Teamwork-style header bar, with logo, title area, user name, and so on. A page title can be provided in arg:title. There are two insertion points, titleArea as an alternative to arg:title (handy for teamwork:Breadcrumbs), and toolArea for buttons or other controls. See also teamwork:Chrome, which should be used if the left-hand main menu should also be shown." ;
+        rdfs:label       "Header Explorer" ;
+        rdfs:subClassOf  teamwork:HeaderElements ;
+        spin:constraint  [ rdf:type       spl:Argument ;
+                           rdfs:comment   "If true, the \"create new collection\" button will not be displayed" ;
+                           spl:optional   true ;
+                           spl:predicate  arg:supressCreateNewCollection ;
+                           spl:valueType  xsd:boolean
+                         ] ;
+        spin:constraint  [ rdf:type       spl:Argument ;
+                           rdfs:comment   "An optional JavaScript function to call when an item is selected from the global search" ;
+                           spl:optional   true ;
+                           spl:predicate  arg:onSearchSelect ;
+                           spl:valueType  xsd:string
+                         ] ;
+        spin:constraint  [ rdf:type       spl:Argument ;
+                           rdfs:comment   "True to suppress the default \"Home\" navigation bar entry." ;
+                           spl:optional   true ;
+                           spl:predicate  arg:pageType ;
+                           spl:valueType  xsd:string
+                         ] ;
+        spin:constraint  [ rdf:type       spl:Argument ;
+                           rdfs:comment   "If true, the \"hamburger\" quick navigation menu will not be displayed." ;
+                           spl:optional   true ;
+                           spl:predicate  arg:suppressQuickNavigation ;
+                           spl:valueType  xsd:boolean
+                         ] ;
+        spin:constraint  [ rdf:type       spl:Argument ;
+                           rdfs:comment   "True to hide the global look up and quick navigation area." ;
+                           spl:optional   true ;
+                           spl:predicate  arg:suppressSearch ;
+                           spl:valueType  xsd:boolean
+                         ] ;
+        spin:constraint  [ rdf:type       spl:Argument ;
+                           rdfs:comment   "An optional logo image, overriding the default logo." ;
+                           spl:optional   true ;
+                           spl:predicate  arg:logo ;
+                           spl:valueType  xsd:string
+                         ] ;
+        spin:constraint  [ rdf:type       spl:Argument ;
+                           rdfs:comment   "Title to display in the header." ;
+                           spl:optional   true ;
+                           spl:predicate  arg:title ;
+                           spl:valueType  xsd:string
+                         ] ;
+        spin:constraint  [ rdf:type       spl:Argument ;
+                           rdfs:comment   "If true, the logo will not be a link to the home page." ;
+                           spl:optional   true ;
+                           spl:predicate  arg:suppressHome ;
+                           spl:valueType  xsd:boolean
+                         ] ;
+        spin:constraint  [ rdf:type       spl:Argument ;
+                           rdfs:comment   "If true, links in the quick navigation menu open in a new tab." ;
+                           spl:optional   true ;
+                           spl:predicate  arg:quickNavNewTab ;
+                           spl:valueType  xsd:boolean
+                         ] ;
+        ui:overrides     teamwork:Header ;
+        ui:prototype     [ rdf:type             html:Header ;
+                           html:class           "teamwork-page-header" ;
+                           html:data-page-type  [ sp:varName  "pageType" ] ;
+                           html:id              "header" ;
+                           html:role            "banner" ;
+                           ui:child             [ rdf:type       html:Div ;
+                                                  html:class     "headerContainer" ;
+                                                  ui:child       [ rdf:type       html:Div ;
+                                                                   html:class     "left-col" ;
+                                                                   ui:child       [ rdf:type       teamwork:CollectionSelector ;
+                                                                                    arg:max        100 ;
+                                                                                    arg:min        0 ;
+                                                                                    ui:childIndex  1
+                                                                                  ] ;
+                                                                   ui:child       [ rdf:type          teamwork:HeaderLogoSection ;
+                                                                                    arg:logo          [ sp:varName  "logo" ] ;
+                                                                                    arg:suppressHome  [ sp:varName  "suppressHome" ] ;
+                                                                                    ui:childIndex     0
+                                                                                  ] ;
+                                                                   ui:child       [ rdf:type       html:Div ;
+                                                                                    html:class     "teamwork-title-area ml-2" ;
+                                                                                    ui:child       [ rdf:type       ui:insertionPoint ;
+                                                                                                     ui:childIndex  1 ;
+                                                                                                     ui:pointId     "titleArea"
+                                                                                                   ] ;
+                                                                                    ui:child       [ rdf:type       ui:if ;
+                                                                                                     ui:child       [ rdf:type       ui:TextNode ;
+                                                                                                                      ui:childIndex  0 ;
+                                                                                                                      ui:text        [ sp:varName  "title" ]
+                                                                                                                    ] ;
+                                                                                                     ui:childIndex  0 ;
+                                                                                                     ui:condition   [ rdf:type  sp:bound ;
+                                                                                                                      sp:arg1   [ sp:varName  "title" ]
+                                                                                                                    ]
+                                                                                                   ] ;
+                                                                                    ui:childIndex  2
+                                                                                  ] ;
+                                                                   ui:childIndex  0
+                                                                 ] ;
+                                                  ui:child       [ rdf:type       html:Div ;
+                                                                   html:class     "right-col" ;
+                                                                   ui:child       [ rdf:type       html:Div ;
+                                                                                    html:class     "teamwork-tool-area" ;
+                                                                                    ui:child       [ rdf:type       html:Div ;
+                                                                                                     html:class     "header-admin-section" ;
+                                                                                                     ui:child       [ rdf:type       ui:if ;
+                                                                                                                      ui:child       [ rdf:type       teamwork:UserLinkArea ;
+                                                                                                                                       ui:childIndex  0
+                                                                                                                                     ] ;
+                                                                                                                      ui:childIndex  0 ;
+                                                                                                                      ui:condition   [ rdf:type  sp:not ;
+                                                                                                                                       sp:arg1   [ rdf:type  teamwork:isSingleUserProduct ]
+                                                                                                                                     ]
+                                                                                                                    ] ;
+                                                                                                     ui:childIndex  1
+                                                                                                   ] ;
+                                                                                    ui:child       [ rdf:type       html:Div ;
+                                                                                                     html:class     "teamwork-header-inserts" ;
+                                                                                                     ui:child       [ rdf:type       ui:insertionPoint ;
+                                                                                                                      ui:childIndex  0 ;
+                                                                                                                      ui:pointId     "toolArea"
+                                                                                                                    ] ;
+                                                                                                     ui:childIndex  0
+                                                                                                   ] ;
+                                                                                    ui:childIndex  0
+                                                                                  ] ;
+                                                                   ui:childIndex  2
+                                                                 ] ;
+                                                  ui:child       [ rdf:type       html:Div ;
+                                                                   html:class     "middle-col" ;
+                                                                   ui:childIndex  1
+                                                                 ] ;
+                                                  ui:childIndex  0
+                                                ]
+                         ] .
+
+teamwork:MultiSearchBar
+        rdf:type         teamwork:LandingPageGadgetHook ;
+        rdfs:comment     "" ;
+        rdfs:label       "Multi Search" ;
+        rdfs:subClassOf  teamwork:LandingPageGadgetHooks ;
+        ui:prototype     [ rdf:type    html:Div ;
+                           html:class  "multi-search-explorer" ;
+                           ui:child    [ rdf:type       teamwork:MultiSearch ;
+                                         ui:childIndex  0
+                                       ]
+                         ] .
