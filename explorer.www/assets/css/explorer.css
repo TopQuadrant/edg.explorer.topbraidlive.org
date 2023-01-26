@@ -1,6 +1,6 @@
 /* Controls the header styling */
 .teamwork-page-header {
-  background-color: #d9d9d9 !important;
+  background-color: unset !important;
 }
 
 /* Controls the text color of h1/2/3 in swa and react-widgets used on the homepage */
@@ -30,10 +30,15 @@
 .explorer-welcome-gadget {
   text-align: center;
   padding-top:unset !important;
+  font-family: 'Lora' !important;
 }
 
 .widget-content {
   padding-top: 100px;
+}
+
+[data-react-widget=MultiSearch] .multi-search-input-container.expanded {
+  left: unset !important;
 }
 
 /* Controls Basket, Admin icons in the header */

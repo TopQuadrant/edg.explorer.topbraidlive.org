@@ -140,11 +140,7 @@ teamwork:LogoOverride
                                               ui:childIndex  1
                                             ] ;
                            ui:child         [ rdf:type       html:Div ;
-                                              html:class     "teamwork-logo" ;
-                                              ui:child       [ rdf:type       html:Img ;
-                                                               html:src       "lib/explorer/assets/images/Explorer-Logo.png" ;
-                                                               ui:childIndex  0
-                                                             ] ;
+                                              html:class     "teamwork-logo edg-product-logo" ;
                                               ui:childIndex  0
                                             ]
                          ] .
@@ -167,7 +163,7 @@ swa:ElementsOverride  rdf:type  ui:NodeClass ;
                             ui:child  [ rdf:type       html:Link ;
                                         html:href      [ rdf:type  ui:concat ;
                                                          sp:arg1   [ rdf:type  ui:lib ] ;
-                                                         sp:arg2   "/assets/images/tqicon.ico"
+                                                         sp:arg2   "/assets/images/tq-favicon.png"
                                                        ] ;
                                         html:rel       "shortcut icon" ;
                                         ui:childIndex  1
