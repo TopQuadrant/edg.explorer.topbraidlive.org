@@ -23,18 +23,18 @@
 }
 
 .multi-search-explorer .multi-search-input-container.expanded {
-  top: unset;
+  top: unset !important;
 }
 
 /* Controls the welcome message styling */
 .explorer-welcome-gadget {
-  text-align: center;
+  text-align: center !important;
   padding-top:unset !important;
   font-family: 'Lora' !important;
 }
 
 .widget-content {
-  padding-top: 100px;
+  padding-top: 100px !important;
 }
 
 [data-react-widget=MultiSearch] .multi-search-input-container.expanded {
